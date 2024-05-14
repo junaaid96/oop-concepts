@@ -23,3 +23,5 @@ bat = Bat()
 bat.feed_milk()
 bat.lay_eggs()
 bat.eat()
+
+# In the above example, the Bat class inherits from both the Mammal and Bird classes. This is an example of Hybrid Inheritance. The Bat class has access to the eat method from the Animal class, as well as the feed_milk method from the Mammal class and the layEggs method from the Bird class.

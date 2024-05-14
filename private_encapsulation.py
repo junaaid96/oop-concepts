@@ -19,3 +19,5 @@ print(obj.getVar())
 
 # print(obj.__privateVar) # AttributeError: 'MyClass' object has no attribute '__privateVar'
 # This is because __privateVar is a private variable and cannot be accessed from outside the class.
+
+# In the above example, the privateVar attribute is a private variable, denoted by the double underscore prefix. The setVar and getVar methods are used to set and get the value of the privateVar attribute, respectively. This allows controlled access to the private variable from outside the class.

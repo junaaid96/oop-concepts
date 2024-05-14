@@ -14,3 +14,5 @@ class Derived(Base):
 
 obj = Derived()
 obj.display()  # Base display
+
+# In the above example, the Derived class inherits from the Base class. This is an example of Single Inheritance. The Derived class has access to the display method from the Base class.

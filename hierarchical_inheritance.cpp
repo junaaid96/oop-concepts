@@ -42,3 +42,6 @@ int main()
 
     return 0;
 }
+
+// In the above code, we have a base class Animal and two derived classes Dog and Cat. Both Dog and Cat classes inherit from the Animal class. The eat() method is defined in the Animal class and is inherited by both Dog and Cat classes. The bark() method is defined in the Dog class, and the meow() method is defined in the Cat class. When we create objects of the Dog and Cat classes, they can access the eat() method from the Animal class and their own specific methods bark() and meow(). This is an example of hierarchical inheritance.
+// Hierarchical Inheritance is useful when multiple classes share common behavior or attributes with a single base class. It allows for code reusability and helps in organizing the classes in a logical hierarchy.
