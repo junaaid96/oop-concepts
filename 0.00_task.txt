@@ -1,4 +1,4 @@
-1) Example for below topics both in c++ and python.
+1) Example for below topics both in C++ and python.
     OOP:
     1) Class
     2) Object
