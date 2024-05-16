@@ -17,6 +17,6 @@ This repository covers fundamental concepts in Object-Oriented Programming (OOP)
     - Public Access (No Encapsulation)
     - Private Access (Encapsulation)
 6. **Polymorphism**:
-    - Compile-Time Polymorphism (Static Binding)
-    - Run-Time Polymorphism (Dynamic Binding)
+    - Compile-Time Polymorphism (Static Binding/Early Binding/Overloading)
+    - Run-Time Polymorphism (Dynamic Binding/Late Binding/Overriding)
 7. **Abstraction**: Hiding the implementation details and showing only the essential features.

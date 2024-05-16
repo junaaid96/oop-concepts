@@ -7,9 +7,36 @@
     5) Encapsulation
     6) Polymorphism
     7) Abstraction
-2) abstract vs interface
-3) virtual keyword
+
+2) abstract vs interface:
+        Abstract class:
+            - Can have shared code (some methods with implementations).
+            - Used for related classes.
+            - Inherited using `extends`.
+            - Example: Think of it as a blueprint for a house that provides some common features (like walls and roof) but leaves some details (like interior design) for the specific house to define.
+        Interface:
+            - Cannot have any code (only method signatures).
+            - Used for unrelated classes.
+            - Implemented using `implements`.
+            - Example: Think of it as a contract that specifies what needs to be done (like having a door and windows) but not how to do it. Each class that implements the interface decides how to fulfill these requirements.
+
+                    Abstract Class:          Interface:
+                     _________               _________
+                    |  Shape  |             |  Shape  |
+                    |_________|             |_________|
+                        /_\                     /_\                   
+                       /   \...extends...      /   \...implements...              
+                     _________               _________
+                    |  Circle |             |  Circle |
+                    |_________|             |_________|
+                     _________               _________
+                    |Rectangle|             |Rectangle|
+                    |_________|             |_________|
+
+
+3) virtual keyword in C++: Used in base classes to allow derived classes to override a method, ensuring the correct method is called based on the object type at runtime.
+
 4) OOP: https://www.interviewbit.com/oops-interview-questions/
 5) Python: https://www.interviewbit.com/python-interview-questions/
 
-Quiz link: https://docs.google.com/document/d/1_cFVYPnaG4JQyyePQtjffwn4HhX6IEAFYgq_LZi4CyE/edit?usp=sharing
+6) Quiz link: https://docs.google.com/document/d/1_cFVYPnaG4JQyyePQtjffwn4HhX6IEAFYgq_LZi4CyE/edit?usp=sharing
