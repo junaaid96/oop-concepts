@@ -8,6 +8,9 @@ tests for every topic, interview questions, exercises with solutions, and a deta
 **[when to use OOP vs functional programming](docs/OOP_VS_FUNCTIONAL.md)**, plus a
 **[C++ vs Java OOP comparison](docs/CPP_VS_JAVA_OOP.md)**.
 
+## Website
+📖 Read the guides online at **https://junaaid96.github.io/oop-concepts/**, with search, dark mode, rendered diagrams and the Java and C++ sources inline. The site is built from this repo's Markdown (see [`website/`](website)).
+
 ## Repository layout
 ```
 pom.xml            # Maven parent (Java 25, JUnit 5); ./mvnw is the Maven wrapper
@@ -15,6 +18,7 @@ basics/            # first-steps examples: C++ files + a Java module (src/main/j
 topics/NN_topic/   # in-depth topics: README guide + .cpp + Maven module with Java code and JUnit tests
 docs/              # cross-cutting guides (OOP vs FP, C++ vs Java)
 scripts/run_all.sh # build and run every C++ example, then ./mvnw verify
+website/           # VitePress docs site (GitHub Pages)
 ```
 
 ## Learning path
