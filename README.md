@@ -72,7 +72,7 @@ Maven itself is not needed — the wrapper `./mvnw` downloads it.
 ./scripts/run_all.sh                                   # everything: C++ examples + ./mvnw verify
 ./mvnw verify                                          # all Java code and JUnit 5 tests
 ./mvnw -pl topics/01_four_pillars test                 # one topic's Java tests
-java topics/01_four_pillars/src/main/java/oop/pillars/Pillars.java   # run one example's main()
+java topics/01_four_pillars/src/main/java/oop/pillars/Pillars.java   # run an example that has a main()
 c++ -std=c++20 topics/01_four_pillars/pillars.cpp -o pillars && ./pillars
 ```
 

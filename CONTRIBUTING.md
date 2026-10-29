@@ -6,7 +6,7 @@ Thanks for helping improve this OOP learning resource!
 1. Topics live in `topics/NN_topic_name/`. Each folder contains:
    - `README.md` — concept guide, common mistakes, **interview questions**, **exercises with solutions**.
    - `pom.xml` — a Maven module whose parent is the root `pom.xml` (add it to `<modules>` there).
-   - `src/main/java/oop/<pkg>/<Name>.java` — Java 25 example with comments explaining each part and a `main` method.
+   - `src/main/java/oop/<pkg>/<Name>.java` — Java 25 example with comments explaining each part (add a `main` method when a demo helps).
    - `src/test/java/oop/<pkg>/<Name>Test.java` — JUnit 5 tests for the Java example.
    - `<name>.cpp` — C++20 example; `assert`s in `main()` act as its tests.
 2. Keep examples small, runnable and commented line by line where it helps a learner.
