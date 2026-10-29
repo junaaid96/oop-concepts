@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# Build and run every C++ example and every Python test in the repository.
+# Build and run every C++ example, then build and test every Java module with Maven.
 # Usage: ./scripts/run_all.sh          (CXX=g++ ./scripts/run_all.sh to choose a compiler)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 CXX="${CXX:-c++}"
-PY="${PYTHON:-python3}"
 BUILD="$(mktemp -d)"
 trap 'rm -rf "$BUILD"' EXIT
 fail=0
@@ -22,18 +21,7 @@ for src in basics/*.cpp topics/*/*.cpp; do
   fi
 done
 
-echo "== Python basics (smoke run) =="
-for src in basics/*.py; do
-  if echo 5 | $PY "$src" > /dev/null; then echo "  ok   $src"; else echo "  FAIL $src"; fail=1; fi
-done
-
-echo "== Python unit tests =="
-for dir in topics/*/; do
-  if (cd "$dir" && $PY -m unittest discover -q > "$BUILD/log" 2>&1); then
-    echo "  ok   $dir"
-  else
-    echo "  FAIL $dir"; cat "$BUILD/log"; fail=1
-  fi
-done
+echo "== Java (JDK 25, Maven wrapper): compile + JUnit 5 tests =="
+if ./mvnw -B -ntp verify; then echo "  ok   ./mvnw verify"; else echo "  FAIL ./mvnw verify"; fail=1; fi
 
 exit $fail

@@ -1,6 +1,6 @@
 # 12 · Design by Contract
 
-> Files: [`contracts_dbc.py`](contracts_dbc.py) · [`dbc.cpp`](dbc.cpp) · tests: [`test_dbc.py`](test_dbc.py)
+> Files: [`Dbc.java`](src/main/java/oop/dbc/Dbc.java) · [`dbc.cpp`](dbc.cpp) · tests: [`DbcTest.java`](src/test/java/oop/dbc/DbcTest.java)
 
 Bertrand Meyer (Eiffel) described every method as a **contract**:
 - **Preconditions** — what the caller must guarantee (`amount > 0`).
@@ -10,25 +10,33 @@ Bertrand Meyer (Eiffel) described every method as a **contract**:
 Subtyping rule (ties to LSP): a subclass may **weaken preconditions** and **strengthen
 postconditions**, never the reverse.
 
-Implementation options: explicit checks that raise, `assert` (disabled with `python -O` /
-`NDEBUG`), decorators, type hints, C++26 contracts (`pre`/`post`/`contract_assert`), or
-property-based tests (Hypothesis) to probe contracts.
+Implementation options: explicit checks that throw (`Objects.requireNonNull`, `Objects.checkIndex`,
+`IllegalArgumentException`), `assert` (disabled unless the JVM runs with `-ea`; Maven Surefire enables it
+for tests; C++ disables it with `NDEBUG`), C++26 contracts (`pre`/`post`/`contract_assert`), or
+property-based tests (jqwik) to probe contracts.
 
 ## Interview questions
 1. Precondition vs postcondition vs invariant?
 2. Should you use `assert` to validate user input? *No — asserts can be disabled; validate input with exceptions.*
 3. How does DbC relate to Liskov substitution?
+4. Why are Java `assert` statements off by default, and how do you turn them on? *`java -ea`.*
 
 ## Exercises
-1. Add a `@requires` decorator check that `transfer` amount ≤ balance.
+1. Add a `require` precondition that a `withdraw` amount is ≤ balance.
 2. Write an invariant for a `SortedList` and check it after `insert`.
 
 <details><summary>Solutions</summary>
 
-```python
-@requires(lambda self, amount: 0 < amount <= self.balance, "amount within balance")
-def withdraw(self, amount): ...
+```java
+void withdraw(double amount) {
+    require(amount > 0 && amount <= balance, "amount within balance");
+    balance -= amount;
+    checkInvariant();
+}
 
-def _invariant(self): assert all(a <= b for a, b in zip(self.items, self.items[1:]))
+private void checkInvariant() {        // SortedList<Integer>
+    for (int i = 1; i < items.size(); i++)
+        assert items.get(i - 1) <= items.get(i) : "items sorted";
+}
 ```
 </details>

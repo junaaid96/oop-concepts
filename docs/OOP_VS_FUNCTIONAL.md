@@ -1,9 +1,9 @@
 # OOP vs Functional Programming — When to Use Which
 
-> Runnable side-by-side code: [`topics/16_oop_vs_functional`](../topics/16_oop_vs_functional) (Python + C++, with tests).
+> Runnable side-by-side code: [`topics/16_oop_vs_functional`](../topics/16_oop_vs_functional) (Java + C++, with tests).
 
 Object-oriented programming (OOP) and functional programming (FP) are **tools, not teams**.
-Modern languages (Python, C++, Java, Kotlin, C#, TypeScript, Rust, Scala) support both, and most
+Modern languages (Java, C++, Python, Kotlin, C#, TypeScript, Rust, Scala) support both, and most
 good codebases mix them deliberately.
 
 | | OOP | FP |
@@ -66,7 +66,7 @@ flowchart TD
 - **Functional core, imperative shell** — business rules are pure functions; a thin outer layer of
   objects does I/O (database, HTTP, files). The core is trivially testable, the shell is small.
 - **Immutable objects** — objects with methods, but "modifiers" return new instances
-  (`dataclass(frozen=True)` + `replace`, `const` members, Java `record`, `String`).
+  (Java `record` + "wither" methods, `List.copyOf`, `String`, C++ `const` members).
 - **Rich domain objects + pure policies** — `Order.pay()` enforces state transitions, but the tax
   calculation it calls is a pure function.
 - **Strategy as a function** — inject `Callable[[float], float]` instead of a one-method interface.
@@ -76,17 +76,17 @@ flowchart TD
 
 ## 5. Key FP concepts explained for OOP developers
 
-| Concept | Meaning | Python | C++ |
+| Concept | Meaning | Java | C++ |
 |---|---|---|---|
 | **Pure function** | same input → same output, no side effects | plain function that touches no globals/I/O | free function taking `const&`, returning a value |
-| **Immutability** | values never change after creation | `tuple`, `frozenset`, `frozen` dataclass | `const`, value types |
+| **Immutability** | values never change after creation | `record`, `List.of`, `String` | `const`, value types |
 | **Higher-order function** | takes or returns a function | `map`, `sorted(key=)`, decorators | `std::function`, templates taking lambdas, `<algorithm>` |
 | **Lambda / closure** | anonymous function capturing variables | `lambda x: x + n` | `[n](int x){ return x + n; }` |
 | **Composition** | build functions from functions | `reduce(lambda acc, f: f(acc), fns, x)` | `std::views::... | ...` pipelines |
 | **Streams / lazy pipelines** | process items on demand | generators, `itertools` | C++20 ranges & views |
-| **Monad (e.g. Optional/Maybe, Result/Either)** | a wrapper with `map`/`flat_map` to chain steps that may fail or be absent | `Ok/Err` in `oop_vs_fp.py`, `returns` library | `std::optional::and_then/transform` (C++23), `std::expected` (C++23) |
+| **Monad (e.g. Optional/Maybe, Result/Either)** | a wrapper with `map`/`flat_map` to chain steps that may fail or be absent | `Optional.map/flatMap`, sealed `Result` (`Ok`/`Err`) in `OopVsFp.java` | `std::optional::and_then/transform` (C++23), `std::expected` (C++23) |
 | **Pattern matching** | branch on the *shape* of data | `match` (3.10+) | `std::visit` on `std::variant` |
-| **Recursion / folds** | replace loops that mutate accumulators | `functools.reduce` | `std::accumulate`, `std::ranges::fold_left` (C++23) |
+| **Recursion / folds** | replace loops that mutate accumulators | `Stream.reduce`, `Collectors` | `std::accumulate`, `std::ranges::fold_left` (C++23) |
 
 ### Managing side effects
 1. Separate *deciding* from *doing*: a pure function returns **what** to do (e.g. a list of emails to send),
@@ -104,27 +104,33 @@ Choose based on which axis changes more often. (Visitor pattern = FP-style opera
 ## 6. Same problem, both ways (excerpt)
 
 **Cart total**
-```python
-# OOP
-cart = Cart(); cart.add(Item("pen", 2.5, 4)); cart.apply_discount(10); cart.total()
+```java
+// OOP: a mutable object with methods
+var cart = new Cart(); cart.add(new Item("pen", 2.5, 4)); cart.applyDiscount(10); cart.total();
 
-# FP
-cart_total(items, pct=10)   # = pipe(sum(map(line_total, items)), discount(10), round2)
+// FP: records + a stream + composed functions
+double subtotal = items.stream().mapToDouble(OopVsFp::lineTotal).sum();
+double total = discount(10).andThen(x -> Math.round(x * 100) / 100.0).applyAsDouble(subtotal);
 ```
 
 **Failure handling**
-```python
-# OOP: exceptions + mutation
-processor.place("pen", 2)            # raises OrderError, mutates processor.stock
+```java
+// OOP: exceptions + mutation
+processor.place("pen", 2);           // throws OrderException, mutates processor's stock
 
-# FP: Result chaining, no mutation
-place_order(stock, "pen", 2)         # Ok({...new stock...}) or Err("out of stock")
+// FP: a sealed Result, no mutation
+switch (placeOrder(stock, "pen", 2)) {               // Ok(new stock map) or Err("out of stock")
+    case Ok(var newStock) -> show(newStock);
+    case Err(var error)   -> warn(error);
+}
 ```
 
 **Parallel word count**
-```python
-# OOP: shared Counter + Lock (forget the lock → race condition)
-# FP:  pool.map(count_words, chunks) then reduce(+) — nothing shared, nothing locked
+```java
+// OOP: shared counter + ReentrantLock (forget the lock → race condition)
+// FP:  nothing shared, nothing locked
+Map<String, Long> counts = words.parallelStream()
+        .collect(Collectors.groupingByConcurrent(w -> w, Collectors.counting()));
 ```
 
 See the full code and tests in [`topics/16_oop_vs_functional`](../topics/16_oop_vs_functional).
@@ -136,9 +142,9 @@ See the full code and tests in [`topics/16_oop_vs_functional`](../topics/16_oop_
 | Entity with lifecycle & invariants (Order, Account) | **OOP** | encapsulation protects rules |
 | Many interchangeable implementations (plugins, drivers, payment gateways) | **OOP** interfaces | add types without touching callers |
 | GUI widgets, game objects, simulations | **OOP** | identity + state + events |
-| Resource handles (files, sockets, locks) | **OOP** (RAII / `with`) | deterministic cleanup |
+| Resource handles (files, sockets, locks) | **OOP** (RAII / try-with-resources) | deterministic cleanup |
 | ETL, data cleaning, reports, analytics | **FP** | pipelines read like the spec |
-| Validation chains that can fail at any step | **FP** (`Result` / `Optional`) | no nested try/except, explicit errors |
+| Validation chains that can fail at any step | **FP** (`Result` / `Optional`) | no nested try/catch, explicit errors |
 | Pricing, tax, scoring, eligibility rules | **FP** pure functions | trivial to test, reuse, cache |
 | Multi-threaded / parallel processing | **FP** immutable data | no locks, no races |
 | Undo / audit trail / replay | **FP** (fold over events) | history is data |
@@ -149,7 +155,7 @@ See the full code and tests in [`topics/16_oop_vs_functional`](../topics/16_oop_
 
 ### Red flags
 - OOP smell: a class with only one method and no state → it's a function.
-- OOP smell: `if isinstance(...)` chains → missing polymorphism (or use a sum type deliberately).
+- OOP smell: `if (x instanceof ...)` chains → missing polymorphism (or use a sum type deliberately).
 - FP smell: passing 8 parameters through 6 functions → maybe an object (or a record) is hiding there.
 - FP smell: clever one-liners nobody can debug → name intermediate steps.
 
@@ -160,12 +166,12 @@ See the full code and tests in [`topics/16_oop_vs_functional`](../topics/16_oop_
 4. Explain the expression problem and the Visitor pattern.
 5. Why does immutability help concurrency? What's its cost?
 6. How do `Optional`/`Result` replace exceptions? When are exceptions still better? *Truly exceptional, unrecoverable, or cross-cutting failures.*
-7. Is Python/C++ "functional"? *Multi-paradigm: they support FP techniques without enforcing purity.*
+7. Is Java/C++ "functional"? *Multi-paradigm: they support FP techniques without enforcing purity.*
 
 ## Further reading
 - *Functional core, imperative shell* — Gary Bernhardt (Destroy All Software talk "Boundaries").
 - *Out of the Tar Pit* — Moseley & Marks (2006), on state as the root of complexity.
 - *Domain-Driven Design* — Eric Evans (rich domain models).
 - *Domain Modeling Made Functional* — Scott Wlaschin (FP-flavoured domain modelling).
-- [Python functional programming HOWTO](https://docs.python.org/3/howto/functional.html)
+- [Java Stream API (java.util.stream)](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/stream/package-summary.html)
 - [C++ ranges (cppreference)](https://en.cppreference.com/w/cpp/ranges)

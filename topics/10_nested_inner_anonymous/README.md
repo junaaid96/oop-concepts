@@ -1,34 +1,36 @@
 # 10 · Nested, Inner, Local & Anonymous Classes (and Lambdas)
 
-> Files: [`nested.py`](nested.py) · [`nested.cpp`](nested.cpp) · tests: [`test_nested.py`](test_nested.py)
+> Files: [`Nested.java`](src/main/java/oop/nested/Nested.java) · [`nested.cpp`](nested.cpp) · tests: [`NestedTest.java`](src/test/java/oop/nested/NestedTest.java)
 
-| Kind | Meaning | C++ | Python |
+| Kind | Meaning | C++ | Java |
 |---|---|---|---|
-| Nested (static) class | a class scoped inside another, no link to an outer instance | `class Outer { class Node {}; };` | `class Outer: class Node:` |
-| Inner class | holds a reference to an enclosing *instance* (Java non-static inner class) | pass the outer pointer explicitly | pass `self` explicitly |
-| Local class | defined inside a function | supported | supported (and can close over locals) |
-| Anonymous class | one-off implementation of an interface | lambda / unnamed struct | `lambda`, `type(...)`, or a closure |
+| Nested (static) class | a class scoped inside another, no link to an outer instance | `class Outer { class Node {}; };` | `static class Node` |
+| Inner class | holds a reference to an enclosing *instance* (Java non-static inner class) | pass the outer pointer explicitly | non-`static` member class; `outer.new Inner()`, `Outer.this.x` |
+| Local class | defined inside a function | supported | class declared in a method; captures *effectively final* locals |
+| Anonymous class | one-off implementation of an interface | lambda / unnamed struct | `new Greeter() { ... }` or a lambda for functional interfaces |
 
 Use them to **hide helper types** (iterators, nodes, builders) and keep the public API small.
 Lambdas/closures replaced most anonymous classes once languages added first-class functions.
 
 ## Interview questions
-1. Nested static class vs inner class in Java — and how do you emulate each in C++/Python?
+1. Nested static class vs inner class in Java — and how do you emulate each in C++?
+4. Why can lambdas only capture effectively final locals? What does `this` mean in a lambda vs an anonymous class?
+5. Why can an inner class cause a memory leak? *It keeps its outer instance reachable.*
 2. What is a closure? What does it capture in C++ (`[=]`, `[&]`, `[this]`)?
 3. Why is a nested `Node` class a good encapsulation choice for a linked list?
 
 ## Exercises
-1. Add `__len__` to `LinkedList` using its nested `Node`.
-2. Write a closure `make_counter()` returning a function that increments and returns a count.
+1. Add `size()` to `LinkedList` using its nested `Node`.
+2. Write `makeCounter()` returning an `IntSupplier` that increments and returns a count.
 
 <details><summary>Solutions</summary>
 
-```python
-def __len__(self): return sum(1 for _ in self)
-def make_counter():
-    n = 0
-    def inc():
-        nonlocal n; n += 1; return n
-    return inc
+```java
+int size() { int n = 0; for (Node<T> n0 = head; n0 != null; n0 = n0.next) n++; return n; }
+
+static IntSupplier makeCounter() {
+    var n = new int[1];                 // locals must be effectively final, so box the state
+    return () -> ++n[0];
+}
 ```
 </details>

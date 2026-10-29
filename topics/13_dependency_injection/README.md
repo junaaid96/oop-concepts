@@ -1,6 +1,6 @@
 # 13 · Dependency Injection
 
-> Files: [`di.py`](di.py) · [`di.cpp`](di.cpp) · tests: [`test_di.py`](test_di.py)
+> Files: [`Di.java`](src/main/java/oop/di/Di.java) · [`di.cpp`](di.cpp) · tests: [`DiTest.java`](src/test/java/oop/di/DiTest.java)
 
 **Dependency injection**: an object receives its collaborators from the outside instead of creating
 them. It is the practical tool behind the **Dependency Inversion Principle**.
@@ -9,10 +9,12 @@ them. It is the practical tool behind the **Dependency Inversion Principle**.
 - **Setter/property injection**: optional or changeable dependencies.
 - **Parameter (method) injection**: dependency needed for one call only.
 - **Composition root**: the one place (e.g. `main`) where concrete classes are wired together.
-- **DI containers** (Spring, .NET, `dependency-injector` in Python) automate wiring — useful in big apps,
+- **DI containers** (Spring, Guice, Dagger, Jakarta CDI) automate wiring — useful in big apps,
   overkill in small ones. Avoid the **Service Locator** anti-pattern (hidden dependencies).
 
 Benefits: easy testing with fakes, swappable implementations, explicit dependencies.
+`java.time.Clock` is the classic injectable dependency; `ScopedValue` (final in Java 25) passes
+per-request context without threading a parameter through every call.
 
 ## Interview questions
 1. DI vs DIP vs IoC?
@@ -26,12 +28,12 @@ Benefits: easy testing with fakes, swappable implementations, explicit dependenc
 
 <details><summary>Solutions</summary>
 
-```python
-class GreetingService:
-    def __init__(self, clock): self.clock = clock
-    def greet(self): return "Good morning" if self.clock.now().hour < 12 else "Good evening"
-class FixedClock:
-    def __init__(self, dt): self.dt = dt
-    def now(self): return self.dt
+```java
+final class GreetingService {
+    private final Clock clock;
+    GreetingService(Clock clock) { this.clock = clock; }
+    String greet() { return LocalTime.now(clock).getHour() < 12 ? "Good morning" : "Good evening"; }
+}
+// test: new GreetingService(Clock.fixed(Instant.parse("2026-01-01T08:00:00Z"), ZoneOffset.UTC))
 ```
 </details>

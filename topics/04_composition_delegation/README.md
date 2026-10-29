@@ -1,6 +1,6 @@
 # 04 · Composition vs Inheritance, and Delegation
 
-> Files: [`composition.py`](composition.py) · [`composition.cpp`](composition.cpp) · tests: [`test_composition.py`](test_composition.py)
+> Files: [`Composition.java`](src/main/java/oop/composition/Composition.java) · [`composition.cpp`](composition.cpp) · tests: [`CompositionTest.java`](src/test/java/oop/composition/CompositionTest.java)
 
 **"Favour composition over inheritance"** (Gang of Four). Composition = an object *has* other
 objects and uses them ("has-a"). Inheritance = an object *is* a specialised kind of another ("is-a").
@@ -9,13 +9,15 @@ objects and uses them ("has-a"). Inheritance = an object *is* a specialised kind
 |---|---|
 | true is-a, substitutable (LSP holds) | you want to reuse behaviour only |
 | hierarchy is shallow and stable | behaviour must change at runtime |
-| framework requires it (e.g. `unittest.TestCase`) | you need many combinations (avoid class explosion) |
+| framework requires it (e.g. extending `RuntimeException`) | you need many combinations (avoid class explosion) |
 
 **Delegation**: the outer object forwards a request to a helper it owns. It gives you reuse
-without inheritance's tight coupling (`__getattr__` in Python can automate forwarding).
+without inheritance's tight coupling. Java has no automatic forwarding — write the forwarding
+methods (or extend a `java.util.AbstractList`-style skeleton, as `LoggingList` does).
 
-**Classic trap**: `class Stack(list)` exposes `insert`, `sort`… which break the stack contract.
-Wrap a list instead.
+**Classic trap**: `class BadStack<T> extends ArrayList<T>` exposes `add(int, T)`, `sort`, `remove(0)`… which break the
+stack contract (`java.util.Stack extends Vector` made exactly this mistake). Wrap an `ArrayDeque` instead.
+`Collections.unmodifiableList` is another composition example: a read-only *view* that delegates.
 
 ## Interview questions
 1. Why is inheritance called "white-box reuse" and composition "black-box reuse"?
@@ -29,14 +31,19 @@ Wrap a list instead.
 
 <details><summary>Solutions</summary>
 
-```python
-class TurboEngine:
-    def start(self): return "turbo whoosh"
-car = Car(ElectricEngine()); car.engine = TurboEngine()
+```java
+final class TurboEngine implements Engine {
+    @Override public String start() { return "turbo whoosh"; }
+}
+var car = new Car(new ElectricEngine());
+car.setEngine(new TurboEngine());           // behaviour swapped at runtime
 
-class LoggingList:
-    def __init__(self): self._items, self.log = [], []
-    def append(self, x): self.log.append(f"append {x}"); self._items.append(x)
-    def __getattr__(self, name): return getattr(self._items, name)   # delegate the rest
+final class LoggingList<T> extends AbstractList<T> {   // delegation to a private list
+    private final List<T> items = new ArrayList<>();
+    final List<String> log = new ArrayList<>();
+    @Override public boolean add(T x) { log.add("add " + x); return items.add(x); }
+    @Override public T get(int i) { return items.get(i); }
+    @Override public int size() { return items.size(); }
+}
 ```
 </details>
