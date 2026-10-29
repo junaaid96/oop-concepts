@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <type_traits>
 
 // "Interface": only pure virtual functions + virtual destructor, no data.
 struct Printable {
