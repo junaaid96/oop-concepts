@@ -24,7 +24,7 @@ int main() {
     Color a{1, 2, 3};
     Color b = a;                     // value semantics: b is an independent copy
     b.r = 9;
-    assert(a.r == 1);                // a unchanged
+    assert(a.r == 1 && b.r == 9);    // a unchanged
 
     Color& ref = a;                  // reference: an alias for the same object
     ref.r = 7;
