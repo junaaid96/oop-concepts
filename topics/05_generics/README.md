@@ -1,32 +1,37 @@
 # 05 · Generics (Parametric Polymorphism)
 
-> Files: [`generics.py`](generics.py) · [`generics.cpp`](generics.cpp) · tests: [`test_generics.py`](test_generics.py)
+> Files: [`Generics.java`](src/main/java/oop/generics/Generics.java) · [`generics.cpp`](generics.cpp) · tests: [`GenericsTest.java`](src/test/java/oop/generics/GenericsTest.java)
 
 Write code **once** that works for many types while keeping type safety.
 
-- **Python**: `TypeVar`, `Generic[T]`, PEP 695 syntax `class Box[T]:` / `def first[T](xs: list[T]) -> T` (3.12+),
-  bounds (`T: Comparable`), `Protocol` constraints. Generics are checked by tools like mypy/pyright,
-  not at runtime.
+- **Java**: `record Box<T>(T value)`, generic methods `static <T> Optional<T> first(List<T> xs)`,
+  bounds `<T extends Comparable<? super T>>`, multiple bounds `<T extends Number & Comparable<T>>`.
+  Generics are checked by the compiler and then **erased**: at run time a `List<String>` is just a `List`
+  (no `new T()`, no `instanceof List<String>`, no primitive type arguments — use `Integer`).
 - **C++**: templates are instantiated at compile time (zero runtime cost). C++20 **concepts**
   constrain template parameters with readable errors.
-- **Variance**: `list[Cat]` is not a `list[Animal]` (mutable containers are invariant);
-  `Sequence[Cat]` *is* a `Sequence[Animal]` (read-only → covariant).
+- **Variance**: `List<Cat>` is not a `List<Animal>` (generics are invariant). Use wildcards at the
+  call site — **PECS**: *Producer `extends`, Consumer `super`* (`sum(List<? extends Number>)`,
+  `addInts(List<? super Integer>)`). Arrays are covariant and fail at run time (`ArrayStoreException`).
 
 ## Interview questions
 1. Generics vs `object`/`void*`: what do you gain? *Compile-time type safety, no casts.*
 2. Explain covariance and contravariance with an example.
-3. C++ templates vs Java generics? *Templates generate code per type (monomorphisation); Java erases types.*
+3. C++ templates vs Java generics? *Templates generate code per type (monomorphisation); Java erases types.* See [docs/CPP_VS_JAVA_OOP.md](../../docs/CPP_VS_JAVA_OOP.md).
+5. What is type erasure and what can't you do because of it?
+6. Explain PECS with `Collections.copy(List<? super T> dest, List<? extends T> src)`.
 4. What is a bounded type parameter / concept?
 
 ## Exercises
-1. Write a generic `max_by(items, key)` function.
+1. Write a generic `maxBy(items, key)` method.
 2. Write a C++ concept `Addable` and a generic `sum` function.
 
 <details><summary>Solutions</summary>
 
-```python
-def max_by[T, K](items: list[T], key: Callable[[T], K]) -> T:
-    return max(items, key=key)
+```java
+static <T, K extends Comparable<? super K>> T maxBy(List<T> items, Function<? super T, ? extends K> key) {
+    return items.stream().max(Comparator.comparing(key)).orElseThrow();
+}
 ```
 ```cpp
 template <typename T> concept Addable = requires(T a, T b) { { a + b } -> std::same_as<T>; };

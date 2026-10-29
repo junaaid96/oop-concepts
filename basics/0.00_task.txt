@@ -1,4 +1,4 @@
-1) Example for below topics both in C++ and python.
+1) Example for below topics both in C++ and Java.
     OOP:
     1) Class
     2) Object
@@ -37,6 +37,6 @@
 3) virtual keyword in C++: Used in base classes to allow derived classes to override a method, ensuring the correct method is called based on the object type at runtime.
 
 4) OOP: https://www.interviewbit.com/oops-interview-questions/
-5) Python: https://www.interviewbit.com/python-interview-questions/
+5) Java: https://www.interviewbit.com/java-interview-questions/
 
 6) Quiz link: https://docs.google.com/document/d/1_cFVYPnaG4JQyyePQtjffwn4HhX6IEAFYgq_LZi4CyE/edit?usp=sharing

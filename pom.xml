@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.github.junaaid96</groupId>
+  <artifactId>oop-concepts</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>oop-concepts</name>
+  <description>Object-oriented programming concepts with runnable Java 25 and C++20 examples.</description>
+
+  <properties>
+    <maven.compiler.release>25</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.version>5.13.4</junit.version>
+  </properties>
+
+  <modules>
+    <module>basics</module>
+    <module>topics/01_four_pillars</module>
+    <module>topics/02_classes_objects</module>
+    <module>topics/03_interfaces_vs_abstract</module>
+    <module>topics/04_composition_delegation</module>
+    <module>topics/05_generics</module>
+    <module>topics/06_enums_records_sealed</module>
+    <module>topics/07_equality_identity</module>
+    <module>topics/08_lifecycle_memory</module>
+    <module>topics/09_exceptions</module>
+    <module>topics/10_nested_inner_anonymous</module>
+    <module>topics/11_solid</module>
+    <module>topics/12_design_by_contract</module>
+    <module>topics/13_dependency_injection</module>
+    <module>topics/14_design_patterns</module>
+    <module>topics/15_anti_patterns</module>
+    <module>topics/16_oop_vs_functional</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.0</version>
+          <configuration>
+            <compilerArgs><arg>-Xlint:all</arg></compilerArgs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.5.3</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>require-java-25</id>
+            <goals><goal>enforce</goal></goals>
+            <configuration>
+              <rules><requireJavaVersion><version>[25,)</version></requireJavaVersion></rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

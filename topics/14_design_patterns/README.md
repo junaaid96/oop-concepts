@@ -1,19 +1,19 @@
 # 14 · Design Patterns Commonly Used with OOP
 
-> Files: [`patterns.py`](patterns.py) · [`patterns.cpp`](patterns.cpp) · tests: [`test_patterns.py`](test_patterns.py)
+> Files: [`Patterns.java`](src/main/java/oop/patterns/Patterns.java) · [`patterns.cpp`](patterns.cpp) · tests: [`PatternsTest.java`](src/test/java/oop/patterns/PatternsTest.java)
 
 | Category | Pattern | Problem it solves | In this folder |
 |---|---|---|---|
-| Creational | **Factory Method / Simple Factory** | create objects without hard-coding classes | `make_notifier` |
-| Creational | **Builder** | build complex objects step by step | `PizzaBuilder` |
-| Creational | **Singleton** | one shared instance — *use sparingly*, prefer DI | `Config` (module-level in Python) |
-| Structural | **Adapter** | make an incompatible interface fit | `LegacyPrinterAdapter` |
-| Structural | **Decorator** | add behaviour by wrapping | `LoggingNotifier` |
+| Creational | **Factory Method / Simple Factory** | create objects without hard-coding classes | `Notification.create` (sealed) |
+| Creational | **Builder** | build complex objects step by step | `Pizza.builder()` |
+| Creational | **Singleton** | one shared instance — *use sparingly*, prefer DI | `Config` (enum singleton) |
+| Structural | **Adapter** | make an incompatible interface fit | `ThermometerAdapter` |
+| Structural | **Decorator** | add behaviour by wrapping | `Coffee` / `WithMilk` |
 | Behavioral | **Strategy** | swap algorithms at runtime | `ShippingStrategy` |
 | Behavioral | **Observer** | notify subscribers of events | `EventBus` |
-| Behavioral | **Command** | turn requests into objects (undo, queues) | `AddText` |
+| Behavioral | **Command** | turn requests into objects (undo, queues) | `TextEditor` + `Command` |
 | Behavioral | **Template Method** | fixed algorithm, variable steps | see [03](../03_interfaces_vs_abstract) |
-| Behavioral | **State** | behaviour changes with internal state | see exercises |
+| Behavioral | **State** | behaviour changes with internal state | `Light` (enum states) |
 
 Many patterns shrink to a function when the language has first-class functions (Strategy → pass a
 lambda, Command → a closure, Observer → a list of callbacks). See [`docs/OOP_VS_FUNCTIONAL.md`](../../docs/OOP_VS_FUNCTIONAL.md).
@@ -33,15 +33,17 @@ Reference: [refactoring.guru/design-patterns](https://refactoring.guru/design-pa
 
 <details><summary>Solutions</summary>
 
-```python
-class ExpressShipping:
-    def cost(self, kg): return 15 + 3 * kg
+```java
+final class ExpressShipping implements ShippingStrategy {
+    @Override public double cost(double kg) { return 15 + 3 * kg; }
+}
+// or simply: ShippingStrategy express = kg -> 15 + 3 * kg;
 
-class Red:    def next(self): return Green()
-class Green:  def next(self): return Yellow()
-class Yellow: def next(self): return Red()
-class TrafficLight:
-    def __init__(self): self.state = Red()
-    def tick(self): self.state = self.state.next()
+enum TrafficLight {
+    RED { TrafficLight next() { return GREEN; } },
+    GREEN { TrafficLight next() { return YELLOW; } },
+    YELLOW { TrafficLight next() { return RED; } };
+    abstract TrafficLight next();
+}
 ```
 </details>

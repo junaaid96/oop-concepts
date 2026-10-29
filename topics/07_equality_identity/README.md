@@ -1,32 +1,36 @@
 # 07 · Value vs Reference, Identity vs Equality, Hashing
 
-> Files: [`equality.py`](equality.py) · [`equality.cpp`](equality.cpp) · tests: [`test_equality.py`](test_equality.py)
+> Files: [`Equality.java`](src/main/java/oop/equality/Equality.java) · [`equality.cpp`](equality.cpp) · tests: [`EqualityTest.java`](src/test/java/oop/equality/EqualityTest.java)
 
-- **Identity**: *the same object* (`a is b` in Python, same address in C++).
-- **Equality**: *equivalent value* (`a == b`, defined by `__eq__` / `operator==`).
-- **Value semantics** (C++ default, Python ints/strs/tuples): assignment copies the value.
-  **Reference semantics** (Python objects, C++ pointers/references): assignment shares one object —
+- **Identity**: *the same object* (`a == b` on references in Java, same address in C++).
+- **Equality**: *equivalent value* (`a.equals(b)` in Java, `operator==` in C++).
+- **Value semantics** (C++ default, Java primitives): assignment copies the value.
+  **Reference semantics** (every Java object, C++ pointers/references): assignment shares one object —
   mutations are visible through every alias.
-- **Hash contract**: if `a == b` then `hash(a) == hash(b)`. Break it and objects "disappear" in sets/dicts.
+- **Hash contract**: if `a.equals(b)` then `a.hashCode() == b.hashCode()`. Break it (see `BrokenKey`) and objects "disappear" in `HashSet`/`HashMap`.
   Mutable objects used as keys are dangerous: change a field, the hash changes, the lookup fails.
 - **Entities** are compared by identity/ID; **value objects** by all their fields.
 
 ## Interview questions
-1. `==` vs `is` in Python? Why does `a is b` sometimes work for small ints?
-2. Why must `__hash__` be consistent with `__eq__`? What does Python do if you define only `__eq__`? *Sets `__hash__ = None` → unhashable.*
+1. `==` vs `equals` in Java? Why does `Integer.valueOf(127) == Integer.valueOf(127)` hold but not for 128? *The `Integer` cache covers −128..127.*
+2. Why must `hashCode` be consistent with `equals`? What happens if you override only `equals`? *Equal objects land in different buckets, so `contains` fails.*
+5. Why should `equals` use `getClass()` or a `final` class rather than `instanceof` in an extensible hierarchy? *Symmetry breaks across subclasses.*
 3. Shallow vs deep copy?
 4. In C++, what does the defaulted `operator<=>` give you?
 
 ## Exercises
 1. Make `Customer` hashable by `id` only.
-2. Show the bug when a mutable list default is shared between instances, then fix it.
+2. Show the bug when a constructor stores a caller's mutable `List` directly, then fix it.
 
 <details><summary>Solutions</summary>
 
-```python
-def __hash__(self): return hash(self.id)
+```java
+@Override public boolean equals(Object o) { return o instanceof Customer c && c.id == id; }
+@Override public int hashCode() { return Long.hashCode(id); }
 
-class Cart:
-    def __init__(self, items=None): self.items = [] if items is None else items   # not items=[]
+final class Cart {
+    private final List<String> items;
+    Cart(List<String> items) { this.items = new ArrayList<>(items); }   // defensive copy, not this.items = items
+}
 ```
 </details>

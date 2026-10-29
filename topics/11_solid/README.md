@@ -1,6 +1,6 @@
 # 11 · SOLID Overview
 
-> Files: [`solid.py`](solid.py) · [`solid.cpp`](solid.cpp) · tests: [`test_solid.py`](test_solid.py)
+> Files: [`Solid.java`](src/main/java/oop/solid/Solid.java) · [`solid.cpp`](solid.cpp) · tests: [`SolidTest.java`](src/test/java/oop/solid/SolidTest.java)
 
 | Letter | Principle | One-liner | Smell when violated |
 |---|---|---|---|
@@ -32,16 +32,15 @@ SOLID is a set of heuristics, not laws: apply it where change is likely, avoid s
 
 <details><summary>Solutions</summary>
 
-```python
-class PercentDiscount:
-    def __init__(self, pct): self.pct = pct
-    def apply(self, total): return total * (1 - self.pct / 100)
+```java
+record PercentDiscount(double pct) implements Discount {
+    @Override public double apply(double total) { return total * (1 - pct / 100); }
+}
 
-class Printer(Protocol):
-    def print(self, doc: str) -> str: ...
-class Scanner(Protocol):
-    def scan(self) -> str: ...
-class SimplePrinter:          # implements only what it supports
-    def print(self, doc): return f"printed {doc}"
+interface Printer { String print(String doc); }
+interface Scanner { String scan(); }
+final class SimplePrinter implements Printer {          // implements only what it supports
+    @Override public String print(String doc) { return "printed " + doc; }
+}
 ```
 </details>
