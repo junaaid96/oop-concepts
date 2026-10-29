@@ -1,6 +1,9 @@
 // Multiple Inheritance occurs when a class inherits from more than one base class.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Mammal

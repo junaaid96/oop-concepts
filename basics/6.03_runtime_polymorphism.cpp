@@ -1,7 +1,10 @@
 // Run-Time Polymorphism is achieved through method overriding.
 // Method overriding is a feature that allows the derived class to provide another implementation of the method that is already defined in its parent class. This enables the derived class to customize or completely replace the behavior of that method as needed.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Base

@@ -1,6 +1,9 @@
 // Methods are functions defined within a class. They perform actions related to the class. In C++, methods are defined within the class definition using the `class` keyword. They can be public, private, or protected, depending on the access level required. Methods can access and modify the data members of the class. `this` pointer is used to refer to the current object within a method.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Animal

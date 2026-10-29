@@ -1,6 +1,9 @@
 // An object is an instance of a class. It represents a specific entity with its own unique attributes and behaviors.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Car

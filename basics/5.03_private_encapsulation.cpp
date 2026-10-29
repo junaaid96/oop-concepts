@@ -2,7 +2,10 @@
 
 // Private Access means members of a class are not accessible from outside the class. Only the class and friends can access private members. but we can set and get the value of private members using public member functions.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class MyClass

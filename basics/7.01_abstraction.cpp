@@ -1,6 +1,9 @@
 // Abstraction hides the implementation details and exposes only relevant features to the user.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Shape

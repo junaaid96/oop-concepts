@@ -2,7 +2,10 @@
 
 // Public Access means members of a class are accessible from outside the class.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Animal

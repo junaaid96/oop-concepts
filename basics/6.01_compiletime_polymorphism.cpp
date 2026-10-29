@@ -1,7 +1,10 @@
 // Compile-Time Polymorphism is achieved through method overloading or operator overloading.
 // Method overloading is a feature that allows us to have more than one function with the same name in the same scope. The function is overloaded by its signature (the return type, number of arguments, and the data type of the arguments).
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class CompileTimePoly

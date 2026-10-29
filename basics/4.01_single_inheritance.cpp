@@ -2,7 +2,10 @@
 
 // Single Inheritance occurs when a class (derived class) inherits from only one base class.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Base

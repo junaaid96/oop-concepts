@@ -1,6 +1,9 @@
 // Hybrid Inheritance is a combination of two or more types of inheritance.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Animal
@@ -12,7 +15,7 @@ public:
     }
 };
 
-class Mammal : public Animal
+class Mammal : virtual public Animal // virtual inheritance avoids the "diamond problem" (only one Animal subobject)
 {
 public:
     void feedMilk()
@@ -21,7 +24,7 @@ public:
     }
 };
 
-class Bird : public Animal
+class Bird : virtual public Animal // virtual: shared Animal base
 {
 public:
     void layEggs()

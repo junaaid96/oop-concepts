@@ -1,6 +1,9 @@
 // Hierarchical Inheritance occurs when multiple classes inherit from a single base class.
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
 using namespace std;
 
 class Animal
